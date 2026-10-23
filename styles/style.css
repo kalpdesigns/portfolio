@@ -1,0 +1,474 @@
+/* ==========================================================================
+   Kalpesh Bhavsar — portfolio styles
+   1. Design tokens (colors, fonts, sizes)
+   2. Base
+   3. Shared pieces (labels, headlines, buttons, grain)
+   4. Project atmospheres (gradients)
+   5. Sections, top to bottom
+   ========================================================================== */
+
+/* ---------- 1. Design tokens ---------- */
+:root {
+  /* Shell colors: the same on every section */
+  --cream: #F5F0E8;
+  --cream-2: #EDE5D8;      /* slightly darker cream for active states */
+  --paper: #FFFDF9;        /* cards */
+  --ink: #1B1815;          /* near-black text */
+  --ink-2: #4A433C;        /* secondary body text */
+  --muted: #8A8076;        /* the grey "last word" in headlines */
+  --accent: #FF5B1F;       /* the one orange, for buttons */
+  --line: rgba(27, 24, 21, 0.1);
+
+  /* Fonts */
+  --serif: "Instrument Serif", "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  /* Layout */
+  --max: 1240px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --radius: clamp(20px, 2.6vw, 36px);
+  --section: clamp(96px, 14vw, 200px);
+
+  /* One easing curve for the whole site (ease-out cubic) */
+  --ease: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+  /* Grain: tiny tiled noise generated in code (no image file) */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ---------- 2. Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+/* Smooth-scroll (Lenis) housekeeping */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3, p { margin: 0; }
+ol, ul { margin: 0; padding: 0; list-style: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
+
+.skip { position: absolute; left: -9999px; top: 8px; z-index: 100; background: var(--paper); padding: 8px 14px; border-radius: 999px; }
+.skip:focus { left: 8px; }
+
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+.wrap--narrow { max-width: 860px; }
+.center { text-align: center; }
+
+/* ---------- 3. Shared pieces ---------- */
+.label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 20px;
+}
+.label--light { color: var(--ink-2); }
+.mono { font-family: var(--mono); }
+
+.display {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(38px, 5vw, 68px);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.display .muted { color: var(--muted); }
+.title { font-family: var(--serif); font-size: clamp(30px, 3vw, 40px); line-height: 1.1; font-weight: 400; }
+.body { color: var(--ink); font-size: 17px; }
+.body--soft { color: var(--ink-2); }
+.lede { margin-top: 28px; color: var(--ink-2); font-size: clamp(17px, 1.4vw, 19px); text-wrap: pretty; }
+.section-head { margin-bottom: clamp(48px, 7vw, 96px); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px;
+  border-radius: 999px;
+  font-size: 15px; font-weight: 500; text-decoration: none;
+  transition: transform 0.4s var(--ease), background-color 0.4s var(--ease);
+}
+.btn:hover { transform: translateY(-1px); }
+/* Orange button uses dark text: white on this orange fails contrast */
+.btn--accent { background: var(--accent); color: var(--ink); }
+.btn--accent:hover { background: #FF6D36; }
+.btn--ghost { background: var(--paper); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.btn--lg { height: 52px; padding: 0 26px; font-size: 16px; }
+
+.textlink {
+  display: inline-flex; gap: 6px; margin-top: 24px;
+  font-size: 15px; font-weight: 500; text-decoration: none;
+  border-bottom: 1px solid currentColor; padding-bottom: 2px;
+}
+.textlink--off { color: var(--ink-2); border-bottom-style: dashed; border-bottom-color: var(--muted); font-weight: 400; }
+
+/* Grain overlay: add class "grain" to any panel (fine speckle, as in reference bg-1 to bg-3) */
+.grain { position: relative; isolation: isolate; overflow: hidden; }
+.grain::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background-image: var(--grain);
+  background-size: 140px 140px;
+  mix-blend-mode: soft-light;
+  opacity: 1;
+}
+
+/* ---------- 4. Atmospheres ----------
+   Smooth blurred color fields built from the colors of reference images bg-1, bg-2, bg-3:
+   a base color plus five soft blobs. */
+.atmo { background-color: var(--a0); background-image:
+  radial-gradient(55% 65% at var(--p1), var(--a1) 0%, transparent 72%),
+  radial-gradient(55% 65% at var(--p2), var(--a2) 0%, transparent 72%),
+  radial-gradient(60% 60% at var(--p3), var(--a3) 0%, transparent 72%),
+  radial-gradient(50% 55% at var(--p4), var(--a4) 0%, transparent 72%),
+  radial-gradient(45% 50% at var(--p5), var(--a5) 0%, transparent 72%);
+}
+
+/* bg-1: warm apricot, coral and lilac */
+.atmo--warm, .atmo--sample, .atmo--contact, .atmo--how0, .atmo--stat-a {
+  --a0: #EFB48C;
+  --a1: #F4BC7E; --p1: 45% 22%;   /* golden apricot */
+  --a2: #EE806C; --p2: 90% 35%;   /* coral */
+  --a3: #C78FB8; --p3: 58% 95%;   /* lilac */
+  --a4: #C995AC; --p4: 14% 55%;   /* dusty lilac */
+  --a5: #F6CBAA; --p5: 4% 98%;    /* peach cream */
+}
+
+/* bg-2: aqua, sky blue and mint */
+.atmo--aqua, .atmo--admin, .atmo--how1, .atmo--stat-b {
+  --a0: #7CC8E2;
+  --a1: #36B2D8; --p1: 14% 12%;   /* deep aqua */
+  --a2: #5E9FE6; --p2: 94% 14%;   /* periwinkle */
+  --a3: #9EEACF; --p3: 8% 88%;    /* mint */
+  --a4: #88CDEF; --p4: 88% 82%;   /* sky */
+  --a5: #6CC4D2; --p5: 50% 45%;   /* teal haze */
+}
+
+/* bg-3: lime, sage and mint */
+.atmo--lime, .atmo--fyule, .atmo--how2 {
+  --a0: #A9DC8C;
+  --a1: #DCD47E; --p1: 50% 30%;   /* soft ochre */
+  --a2: #8FCC94; --p2: 8% 10%;    /* sage */
+  --a3: #9AEAC0; --p3: 55% 92%;   /* mint */
+  --a4: #86B85E; --p4: 100% 62%;  /* leaf green */
+  --a5: #B8DC7A; --p5: 88% 8%;    /* lime */
+}
+
+/* ---------- 5. Sections ---------- */
+
+/* Floating pill navigation */
+.nav {
+  position: fixed; top: 16px; left: 0; right: 0; z-index: 50;
+  display: flex; justify-content: center; align-items: center;
+  padding: 0 var(--gutter);
+  pointer-events: none;
+}
+.nav > * { pointer-events: auto; }
+.nav__pill {
+  display: flex; gap: 4px; padding: 4px;
+  /* Solid cream instead of a live blur: blur is redrawn on every scroll frame */
+  background: rgba(245, 240, 232, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  box-shadow: 0 6px 24px rgba(27, 24, 21, 0.08);
+}
+.nav__brand, .nav__link {
+  display: inline-flex; align-items: center; height: 38px; padding: 0 16px;
+  border-radius: 999px; background: var(--paper);
+  text-decoration: none; font-size: 15px;
+}
+.nav__brand { font-family: var(--serif); font-size: 20px; }
+.nav__link { transition: background-color 0.3s var(--ease); }
+.nav__link:hover { background: var(--cream-2); }
+.nav__cta { position: absolute; right: var(--gutter); height: 46px; box-shadow: 0 6px 24px rgba(27, 24, 21, 0.1); }
+
+/* Hero: blue sky with drifting clouds (after reference bg-cloud).
+   The sky ends in cream at the bottom, so it melts into the page, and it fades out on scroll. */
+.hero { padding: 0; }
+.hero__panel {
+  position: relative; overflow: hidden;
+  min-height: min(100svh, 920px);
+  background: var(--cream);
+  display: grid; place-items: center;
+  padding: 140px var(--gutter) 120px;
+}
+.hero__sky {
+  position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(180deg,
+    #6FB6E8 0%, #80C3EC 28%, #98D2F0 52%, #BFE4F5 72%, #E2F1F6 86%, var(--cream) 100%);
+}
+.hero__clouds { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.sr-svg { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* One cloud = a few white puffs, roughened by the #cloud-fluff filter (index.html).
+   Clouds sail slowly across the sky and wrap around. Each has its own size, height,
+   speed and starting point (a negative delay starts it part-way across). */
+.cloud {
+  position: absolute; left: 0; top: var(--y); width: var(--w); opacity: var(--o, 1);
+  will-change: transform;
+  animation: sail var(--dur) linear infinite;
+  animation-delay: calc(var(--dur) * var(--p) * -1);
+}
+@keyframes sail {
+  from { transform: translate3d(-100%, 0, 0); }
+  to   { transform: translate3d(100vw, 0, 0); }
+}
+.cloud__body {
+  width: 100%; aspect-ratio: 2.3 / 1;
+  background:
+    radial-gradient(closest-side, #FFFFFF 70%, rgba(255,255,255,0) 100%) 16% 70% / 36% 62% no-repeat,
+    radial-gradient(closest-side, #FFFFFF 70%, rgba(255,255,255,0) 100%) 42% 30% / 44% 84% no-repeat,
+    radial-gradient(closest-side, #FFFFFF 70%, rgba(255,255,255,0) 100%) 70% 38% / 40% 74% no-repeat,
+    radial-gradient(closest-side, #FFFFFF 66%, rgba(255,255,255,0) 100%) 90% 72% / 28% 48% no-repeat,
+    radial-gradient(closest-side, #E3EEF8 66%, rgba(227,238,248,0) 100%) 50% 92% / 92% 34% no-repeat;
+  filter: url(#cloud-fluff);
+}
+/* Landing strip clouds (positions at page load follow bg-cloud) */
+.cloud--h1 { --w: 30vw; --y: 15%; --dur: 160s; --p: .22; }
+.cloud--h2 { --w: 38vw; --y: 7%;  --dur: 190s; --p: .80; }
+.cloud--h3 { --w: 28vw; --y: 42%; --dur: 210s; --p: .50; --o: .55; }
+.cloud--h4 { --w: 38vw; --y: 64%; --dur: 175s; --p: .24; }
+.cloud--h5 { --w: 32vw; --y: 55%; --dur: 200s; --p: .86; }
+.cloud--h6 { --w: 20vw; --y: 30%; --dur: 230s; --p: .64; --o: .7; }
+/* Footer clouds */
+.cloud--f1 { --w: 26vw; --y: 10%; --dur: 180s; --p: .18; }
+.cloud--f2 { --w: 34vw; --y: 22%; --dur: 210s; --p: .72; }
+.cloud--f3 { --w: 20vw; --y: 40%; --dur: 240s; --p: .45; --o: .7; }
+.cloud--f4 { --w: 28vw; --y: 2%;  --dur: 200s; --p: .96; }
+
+/* A soft white haze behind the headline so dark text stays crisp over sky and clouds */
+.hero__shade {
+  position: absolute; inset: 0; z-index: 2;
+  background: radial-gradient(48% 40% at 50% 50%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.12) 70%, transparent 100%);
+}
+.hero__content { position: relative; z-index: 4; max-width: 1000px; text-align: center; color: var(--ink); }
+.display--hero { font-size: clamp(42px, 6.6vw, 96px); line-height: 1; }
+.display--hero .soft { color: #3D5468; font-style: italic; }
+.hero__line {
+  display: inline-block; margin-top: 36px;
+  padding: 10px 18px; border-radius: 999px;
+  background: rgba(245, 240, 232, 0.92); color: var(--ink);
+  font-size: 15px; line-height: 1.4;
+}
+
+/* Intro */
+.intro { padding: var(--section) 0 calc(var(--section) * 0.7); }
+
+/* Work: stacked folders (stacking after tanujashastri.com, shape after reference Folder-blank).
+   Every folder sticks at the same height. The next one slides up and covers the one
+   before, but each folder's tab sits further right, so all the tabs stay visible
+   above the pile like dividers in a filing drawer. Click a tab to jump to that folder. */
+.work { padding-bottom: clamp(80px, 10vw, 140px); }
+.work__list {
+  --stick: 84px;     /* where folders stop (just below the nav) */
+  --tab-h: 52px;
+  --tab-w: 220px;
+  display: grid; gap: 34vh;   /* scroll distance between folders */
+  padding-bottom: 4vh;
+}
+/* Only the visible tab and body catch clicks, so tabs of folders lower in the pile stay clickable */
+.folder { position: sticky; top: var(--stick); pointer-events: none; }
+.folder__tab, .folder__body { pointer-events: auto; }
+.folder__tab {
+  position: relative; z-index: 2; display: block;
+  width: var(--tab-w); height: var(--tab-h);
+  margin-left: calc(var(--radius) + var(--i) * (var(--tab-w) + 12px));
+  margin-bottom: -1px;   /* tab overlaps the folder edge so they read as one shape */
+  text-decoration: none;
+}
+.folder__tab-shape { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.folder__tab-fill { fill: var(--paper); transition: fill 0.3s var(--ease); }
+.folder__tab-line { fill: none; stroke: rgba(27, 24, 21, 0.1); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.folder__tab:hover .folder__tab-fill { fill: #FFF4E6; }
+.folder__num {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  height: 100%; padding-top: 4px;
+  font-size: 14px; letter-spacing: 0.06em; color: var(--ink);
+}
+.folder__body {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: minmax(300px, 5fr) 7fr;
+  height: min(600px, calc(100svh - var(--stick) - var(--tab-h) - 24px));
+  min-height: 460px;
+  background: var(--paper);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--line), 0 -20px 50px -30px rgba(60, 70, 90, 0.3);
+}
+.folder__info {
+  display: flex; flex-direction: column;
+  padding: clamp(26px, 2.8vw, 40px) clamp(24px, 2.8vw, 40px);
+  border-right: 1px solid var(--line);
+  overflow: hidden;
+}
+.folder__info .label { margin-bottom: 14px; }
+.folder__title { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 3vw, 44px); line-height: 1.05; }
+.folder__sub { margin-top: 16px; font-size: 16px; line-height: 1.55; color: var(--ink-2); text-wrap: pretty; }
+.folder__dds { margin-top: auto; padding-top: 22px; }
+.folder__cta { margin-top: 20px; align-self: flex-start; flex-shrink: 0; }
+.btn--off { color: var(--ink-2); cursor: default; }
+.btn--off:hover { transform: none; }
+
+/* Dropdowns (Discipline / My role): only one open at a time */
+.dd { border-top: 1px solid var(--line); }
+.dd__btn {
+  display: flex; width: 100%; justify-content: space-between; align-items: center;
+  padding: 13px 0; text-align: left; font-size: 16px; font-weight: 500;
+}
+.dd__chev {
+  width: 8px; height: 8px; margin-right: 4px;
+  border-right: 1.5px solid var(--ink-2); border-bottom: 1.5px solid var(--ink-2);
+  transform: rotate(45deg) translateY(-2px); transition: transform 0.45s var(--ease);
+}
+.dd.is-open .dd__chev { transform: rotate(-135deg) translateY(-2px); }
+.dd__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s var(--ease); }
+.dd.is-open .dd__panel { grid-template-rows: 1fr; }
+.dd__panel > div { overflow: hidden; }
+.dd__panel p { padding-bottom: 14px; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+
+.folder__panel { position: relative; display: grid; place-items: center; }
+.folder__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+
+/* Floating UI card on top of a panel (placeholder UI detail) */
+.ui-card {
+  position: relative; z-index: 4;
+  width: min(360px, 78%);
+  background: var(--paper);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 30px 60px -24px rgba(90, 64, 96, 0.28), 0 2px 6px rgba(90, 64, 96, 0.08);
+  font-size: 14px; line-height: 1.3;
+}
+.ui-card__head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.ui-card__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.project--fyule .ui-card__dot { background: #FF2E88; }
+.project--admin .ui-card__dot { background: #4A5E7A; }
+.ui-card__title { font-weight: 500; flex: 1; }
+.ui-card__chip { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #EEF3EA; color: #2E5A2B; }
+.ui-card__rows li {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 10px 12px; margin-top: 6px;
+  background: #F6F2EB; border-radius: 10px; color: var(--ink-2);
+}
+.ui-card__rows .mono { color: var(--ink); font-size: 13px; }
+.ui-card__bar { margin-top: 12px; height: 6px; border-radius: 99px; background: #EEE7DC; overflow: hidden; }
+.ui-card__bar span { display: block; height: 100%; border-radius: inherit; background: var(--ink); }
+
+/* Client logos: a slow, endless strip. Two identical rows slide left together. */
+.clients { padding: 0 0 clamp(96px, 12vw, 160px); }
+.clients .label { margin-bottom: 36px; }
+.marquee {
+  display: flex; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee__track {
+  display: flex; flex-shrink: 0; align-items: center; gap: clamp(48px, 6vw, 96px);
+  padding-right: clamp(48px, 6vw, 96px);
+  animation: marquee 48s linear infinite;
+}
+.marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translate3d(-100%, 0, 0); } }
+.logo { flex-shrink: 0; }
+.logo--text { font-family: var(--serif); font-size: clamp(30px, 3.2vw, 44px); line-height: 1; color: var(--ink-2); white-space: nowrap; }
+.logo img { height: clamp(28px, 3vw, 40px); width: auto; opacity: 0.75; filter: grayscale(1); }
+
+/* Footer: the sky comes back (after references Footer-1/2/3). Cream fades into blue sky
+   with sailing clouds, a big call to action, a giant "Kalpesh" sinking behind soft
+   green hills (colors from bg-3), and the links sitting on the front hill. */
+.footer__scene { position: relative; overflow: hidden; padding-top: clamp(120px, 14vw, 200px); }
+.footer__sky {
+  position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(180deg, var(--cream) 0%, #E4F2F7 14%, #C4E6F5 36%, #9DD4F0 60%, #82C4EC 100%);
+}
+.footer__clouds { position: absolute; inset: 0 0 38% 0; z-index: 1; pointer-events: none; }
+.footer__cta { position: relative; z-index: 4; }
+.display--footer { font-size: clamp(36px, 5vw, 72px); max-width: 920px; margin: 0 auto; }
+.display--footer .muted { color: #3D5468; font-style: italic; }
+.footer__actions { margin-top: 34px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+.footer__land { position: relative; z-index: 2; height: clamp(440px, 46vw, 660px); margin-top: clamp(16px, 3vw, 40px); }
+.footer__mark {
+  position: absolute; left: 0; right: 0; top: 0; z-index: 0;
+  font-family: var(--serif); font-size: 27vw; line-height: 0.8; letter-spacing: -0.03em;
+  text-align: center; white-space: nowrap; color: rgba(255, 255, 255, 0.92);
+  user-select: none;
+}
+.footer__hills { position: absolute; left: 0; bottom: 0; width: 100%; height: 78%; z-index: 1; }
+/* Grain blends straight onto the hills and wordmark below it */
+.footer__grain {
+  position: absolute; left: 0; right: 0; bottom: 0; top: 38%; z-index: 2; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 35%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 35%);
+  background-image: var(--grain); background-size: 140px 140px;
+  mix-blend-mode: soft-light;
+}
+.footer__bar {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 24px 32px; align-items: start;
+  padding-bottom: 28px;
+  margin: 0 auto;
+}
+.footer__name { font-family: var(--serif); font-size: clamp(26px, 2.4vw, 34px); line-height: 1.1; }
+.footer__note { margin-top: 6px; font-size: 15px; color: var(--ink-2); }
+.footer__col { display: grid; gap: 4px; font-size: 15px; }
+.footer__title { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 4px; }
+.footer__col a { text-decoration: none; width: fit-content; }
+.footer__col a:hover { text-decoration: underline; }
+.footer__copy { grid-column: 1 / -1; padding-top: 14px; border-top: 1px solid rgba(27, 24, 21, 0.14); font-size: 12px; color: var(--ink-2); }
+
+/* Moving pieces get their own GPU layer, so their gradients and grain are painted once
+   and then just slid around instead of redrawn every frame */
+.motion .hero__sky, .motion .hero__clouds, .motion .hero__content,
+.motion .ui-card { will-change: transform; }
+
+/* ---------- Phones and small tablets ---------- */
+@media (max-width: 860px) {
+  .nav { justify-content: space-between; }
+  .nav__link { display: none; }
+  .nav__cta { position: static; height: 42px; padding: 0 16px; }
+
+  .hero__panel { min-height: 88svh; padding-top: 120px; }
+  .hero__line { border-radius: 18px; }
+  .cloud--h1 { --w: 56vw; --y: 12%; }
+  .cloud--h2 { --w: 64vw; --y: 4%; }
+  .cloud--h3 { --w: 56vw; --y: 44%; }
+  .cloud--h4 { --w: 66vw; --y: 72%; }
+  .cloud--h5 { --w: 58vw; --y: 62%; }
+  .cloud--h6 { --w: 40vw; --y: 28%; }
+  .cloud--f1 { --w: 50vw; } .cloud--f2 { --w: 60vw; } .cloud--f3 { --w: 40vw; } .cloud--f4 { --w: 52vw; }
+
+  /* Phones: folders sit one after another, no sticking */
+  .work__list { gap: 64px; padding-bottom: 0; --tab-w: 150px; --tab-h: 44px; }
+  .folder { position: relative; top: auto; }
+  .folder__tab { margin-left: 20px; }
+  .folder__body { grid-template-columns: 1fr; height: auto; min-height: 0; }
+  .folder__panel { order: -1; aspect-ratio: 4 / 3.6; }
+  .folder__info { border-right: 0; }
+  .ui-card { width: 86%; font-size: 13px; }
+
+  .footer__land { height: 560px; }
+  .footer__mark { font-size: 30vw; top: 30px; }
+  .footer__hills { height: 82%; }
+  .footer__bar { grid-template-columns: 1fr 1fr; }
+  .footer__id { grid-column: 1 / -1; }
+}
+
+/* Respect "reduce motion" settings */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

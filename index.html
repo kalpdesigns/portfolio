@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ★ EDITABLE: browser-tab title and link-preview text (shown when the link is shared) -->
+  <title>Kalpesh Bhavsar — Product Designer</title>
+  <meta name="description" content="Product designer taking products from zero to live, in a visual language built for their users. Solo designer of the AR app at India Art Fair 2026.">
+  <meta property="og:title" content="Kalpesh Bhavsar — Product Designer">
+  <meta property="og:description" content="I take products from zero to live, in a visual language built for their users.">
+  <meta name="theme-color" content="#F5F0E8">
+  <!-- Browser-tab icon: a serif "K" on cream, drawn in code -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231B1815'/%3E%3Ctext x='32' y='46' font-family='Georgia,serif' font-size='40' text-anchor='middle' fill='%23F5F0E8'%3EK%3C/text%3E%3C/svg%3E">
+
+  <!-- Fonts: Instrument Serif (headlines), Inter (body), JetBrains Mono (labels) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- The page is filled in from content/content.js by scripts/render.js -->
+  <header class="nav" id="nav"></header>
+
+  <main id="main">
+    <section class="hero" id="top"></section>
+    <section class="intro" id="about"></section>
+    <section class="work" id="work"></section>
+    <section class="clients" id="clients"></section>
+  </main>
+
+  <footer class="footer" id="contact"></footer>
+
+  <!-- Cloud edge filter, shared by the clouds in the landing strip and footer -->
+  <svg class="sr-svg" aria-hidden="true" focusable="false">
+    <filter id="cloud-fluff" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="4" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="70" xChannelSelector="R" yChannelSelector="G" result="torn"/>
+      <feGaussianBlur in="torn" stdDeviation="1.2" result="soft"/>
+      <feMerge><feMergeNode in="soft"/><feMergeNode in="torn"/></feMerge>
+    </filter>
+  </svg>
+
+  <script src="content/content.js"></script>
+  <script src="scripts/render.js"></script>
+
+  <!-- Scroll animation: GSAP + ScrollTrigger, loaded from a public CDN (nothing installed).
+       If these fail to load, the page still works, just without motion. -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <!-- Lenis: turns choppy mouse-wheel steps into one smooth glide (desktop only) -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="scripts/motion.js" defer></script>
+</body>
+</html>
